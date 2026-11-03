@@ -1,0 +1,1087 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Monkey Police Academy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap">
+<style>
+/* Layout: one narrow column. Header with monkey and speech bubble, then either the case board, one case (six steps in one stage card), or the grown-up page. */
+:root {
+  --bg: #f3edff;
+  --surface: #ffffff;
+  --paper: #fffdf7;
+  --ink: #26134a;
+  --ink-soft: #5d4a85;
+  --purple: #6d2fd6;
+  --purple-deep: #3b1485;
+  --on-purple: #ffffff;
+  --lav: #e5d9ff;
+  --line: #cdbbf2;
+  --gold: #ffc21a;
+  --gold-deep: #c98f00;
+  --gold-ink: #3a2a00;
+  --focus: #b86e00;
+  --guide-line: rgba(109, 47, 214, 0.75);
+  --guide-done: rgba(31, 157, 98, 0.85);
+  --stroke: #6d2fd6;
+  --demo: #e08a00;
+  --road: #6a5a96;
+  --lane: #efe7ff;
+  --sky: #dccbff;
+  --carbody: #7a3fe0;
+  --glass: #cfe6ff;
+  --monkey: #8a5a3c;
+  --monkey-light: #ecc9a3;
+  --cap: #4b1fa8;
+  --cap-brim: #2b1060;
+  --display: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+  --text: 'Andika', 'Trebuchet MS', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #150a2e; --surface: #241346; --paper: #2a1853; --ink: #f3ecff; --ink-soft: #bda9ec;
+    --purple: #a57bff; --purple-deep: #5b34b0; --on-purple: #1a0b3b; --lav: #33205f; --line: #4a3380;
+    --focus: #ffc21a; --guide-line: rgba(200, 175, 255, 0.8); --guide-done: rgba(70, 210, 140, 0.9);
+    --stroke: #ffc21a; --demo: #ff9de2; --road: #1b0f38; --lane: #6b57a8; --sky: #2c1a57; --carbody: #9a6dff;
+    --cap: #7a45e0; --cap-brim: #4a2899;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #150a2e; --surface: #241346; --paper: #2a1853; --ink: #f3ecff; --ink-soft: #bda9ec;
+  --purple: #a57bff; --purple-deep: #5b34b0; --on-purple: #1a0b3b; --lav: #33205f; --line: #4a3380;
+  --focus: #ffc21a; --guide-line: rgba(200, 175, 255, 0.8); --guide-done: rgba(70, 210, 140, 0.9);
+  --stroke: #ffc21a; --demo: #ff9de2; --road: #1b0f38; --lane: #6b57a8; --sky: #2c1a57; --carbody: #9a6dff;
+  --cap: #7a45e0; --cap-brim: #4a2899;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--text); font-size: 17px; line-height: 1.5;
+  padding-block: 12px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.app { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; text-wrap: balance; line-height: 1.15; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+/* header */
+.brandrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill { font-family: var(--display); font-weight: 600; font-size: 0.9rem; background: var(--gold); color: var(--gold-ink); padding: 5px 12px; border-radius: 99px; }
+.icon-btn { font: 600 0.85rem var(--display); background: var(--surface); color: var(--ink); border: 2px solid var(--line); border-radius: 99px; padding: 5px 12px; cursor: pointer; min-height: 34px; }
+.hero { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: center; margin-top: 10px; }
+.monkey { width: 96px; animation: bob 3.2s ease-in-out infinite; }
+.monkey svg { width: 100%; height: auto; display: block; }
+.monkey.cheer { animation: cheer 0.9s ease-in-out; }
+.bubble { position: relative; background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 12px 16px; font-weight: 700; font-size: 1.05rem; }
+.bubble::before { content: ""; position: absolute; left: -10px; top: 50%; width: 16px; height: 16px; background: var(--surface); border-left: 2px solid var(--line); border-bottom: 2px solid var(--line); transform: translateY(-50%) rotate(45deg); }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes cheer { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg) translateY(-8px); } 75% { transform: rotate(9deg) translateY(-8px); } }
+
+/* buttons */
+.btn { font: 600 1.05rem var(--display); min-height: 56px; padding: 0 22px; border-radius: 18px; border: 0; background: var(--purple); color: var(--on-purple); box-shadow: 0 5px 0 var(--purple-deep); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: transform 0.08s, box-shadow 0.08s; }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--purple-deep); }
+.btn.gold { background: var(--gold); color: var(--gold-ink); box-shadow: 0 5px 0 var(--gold-deep); }
+.btn.gold:active { box-shadow: 0 2px 0 var(--gold-deep); }
+.btn.ghost { background: var(--surface); color: var(--ink); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); }
+.btn.small { min-height: 44px; padding: 0 16px; font-size: 0.95rem; }
+.btn.big { min-height: 68px; font-size: 1.3rem; padding: 0 30px; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.topbar { display: flex; align-items: center; gap: 10px; }
+.topbar h2 { flex: 1; font-size: 1.35rem; }
+.back { font: 600 0.95rem var(--display); text-decoration: none; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 8px 14px; }
+
+/* cards */
+.card { position: relative; background: var(--surface); border: 2px solid var(--line); border-radius: 24px; padding: 16px; display: grid; gap: 14px; }
+.hint { color: var(--ink-soft); font-size: 0.92rem; }
+.center { text-align: center; }
+.cta { display: grid; gap: 10px; justify-items: start; background: var(--purple); color: var(--on-purple); border-radius: 24px; padding: 18px; }
+.cta h2 { font-size: 1.4rem; }
+.cta .row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.cta .pic { font-size: 3.6rem; line-height: 1; }
+.cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
+.casecard { display: grid; justify-items: center; gap: 4px; text-align: center; text-decoration: none; background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 12px 6px; }
+.casecard .pic { font-size: 2.6rem; line-height: 1.1; }
+.casecard b { font-family: var(--text); font-size: 1rem; }
+.pips { display: flex; gap: 4px; }
+.pips i { width: 10px; height: 10px; border-radius: 50%; background: var(--lav); border: 2px solid var(--line); }
+.pips i.on { background: var(--gold); border-color: var(--gold-deep); }
+.ranks { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+
+/* case steps */
+.steps { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.step { position: relative; min-height: 38px; padding: 0 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font: 600 0.85rem var(--display); cursor: pointer; }
+.step.on { background: var(--purple); color: var(--on-purple); border-color: var(--purple-deep); }
+.step.ok::after { content: "\2605"; position: absolute; top: -9px; right: -6px; color: var(--gold); font-size: 0.95rem; text-shadow: 0 1px 0 var(--gold-ink); }
+.picbox { display: grid; justify-items: center; align-content: center; gap: 2px; min-height: 132px; }
+.bigpic { font-size: 5rem; line-height: 1.05; }
+.bigpic.pop, .sl.pop { animation: pop2 0.5s; }
+.wordtxt { font: 700 2.4rem var(--text); letter-spacing: 0.1em; min-height: 1.3em; }
+@keyframes pop2 { 0% { transform: scale(0.4); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.spell { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.sl { width: 56px; height: 70px; border-bottom: 5px solid var(--line); display: grid; place-items: center; font: 700 2.8rem var(--text); }
+.track { --cw: 90px; position: relative; overflow: hidden; height: calc(var(--cw) * 1.15 + 34px); border-radius: 20px; background: linear-gradient(var(--sky) 0 62%, var(--road) 62% 100%); }
+.track .lane { position: absolute; left: 0; right: 0; bottom: 6px; height: 4px; background: repeating-linear-gradient(90deg, var(--lane) 0 22px, transparent 22px 40px); }
+.track .car { position: absolute; left: 0; bottom: 12px; }
+.car { --cw: 90px; width: var(--cw); display: flex; flex-direction: column; align-items: stretch; will-change: transform; }
+.car svg { width: 100%; height: auto; display: block; }
+.plate { margin: 0 auto 3px; min-width: 62%; background: var(--surface); color: var(--ink); border: 3px solid var(--purple-deep); border-radius: 12px; display: flex; align-items: baseline; justify-content: center; gap: 4px; line-height: 1; padding: 3px 6px; font-family: var(--text); }
+.plate b { font-size: calc(var(--cw) * 0.4); }
+.plate i { font-style: normal; font-size: calc(var(--cw) * 0.2); color: var(--ink-soft); }
+.plate .em { font-size: calc(var(--cw) * 0.36); }
+.sir { fill: #888; opacity: 0.4; }
+.car.flash .sir.a { fill: #ff3b30; animation: sa 0.5s steps(1) infinite; }
+.car.flash .sir.b { fill: #2d7bff; animation: sb 0.5s steps(1) infinite; }
+@keyframes sa { 0% { opacity: 1; } 50% { opacity: 0.15; } }
+@keyframes sb { 0% { opacity: 0.15; } 50% { opacity: 1; } }
+.lot { --cw: 90px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 14px; padding: 14px 8px 10px; border-radius: 20px; background: linear-gradient(var(--sky) 0 70%, var(--road) 70% 100%); }
+.carbtn { background: none; border: 0; padding: 0; cursor: pointer; border-radius: 14px; }
+.carbtn .car { position: relative; }
+.carbtn.hintme .car { animation: nudge 0.7s ease-in-out infinite alternate; }
+@keyframes nudge { to { transform: translateY(-8px); } }
+.wob { animation: wob 0.35s; }
+@keyframes wob { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-9px); } 75% { transform: translateX(9px); } }
+.orbhost { display: grid; justify-items: center; }
+.orb { position: relative; margin: 0 auto; border-radius: 50%; background: var(--paper); border: 5px solid var(--purple); box-shadow: 0 0 0 7px var(--lav); overflow: hidden; }
+.orb canvas { display: block; touch-action: none; }
+.orb.final { display: grid; place-items: center; align-content: center; text-align: center; }
+.orb.final .bigpic { font-size: 4.4rem; }
+.mic { width: 124px; height: 124px; border-radius: 50%; border: 0; background: var(--purple); color: var(--on-purple); box-shadow: 0 6px 0 var(--purple-deep); font: 700 1.1rem var(--display); cursor: pointer; display: grid; place-items: center; align-content: center; gap: 2px; justify-self: center; }
+.mic .ico { font-size: 2.4rem; line-height: 1; }
+.mic.live { animation: pulse 0.9s ease-in-out infinite alternate; background: var(--gold); color: var(--gold-ink); box-shadow: 0 6px 0 var(--gold-deep); }
+@keyframes pulse { to { transform: scale(1.1); } }
+.status { text-align: center; min-height: 1.5em; font-weight: 700; }
+.stamp { position: absolute; left: 50%; top: 45%; z-index: 5; pointer-events: none; transform: translate(-50%, -50%) rotate(-8deg); background: var(--gold); color: var(--gold-ink); border: 4px solid var(--gold-ink); border-radius: 14px; padding: 10px 22px; font: 700 clamp(1.4rem, 6.5vw, 2.2rem) var(--display); white-space: nowrap; animation: pop 1.8s forwards; }
+@keyframes pop { 0% { transform: translate(-50%, -50%) rotate(-8deg) scale(2.3); opacity: 0; } 14% { transform: translate(-50%, -50%) rotate(-8deg) scale(1); opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(-8deg) scale(1); opacity: 0; } }
+.dots { display: flex; gap: 8px; justify-content: center; }
+.dots i { width: 14px; height: 14px; border-radius: 50%; background: var(--lav); border: 2px solid var(--line); }
+.dots i.on { background: var(--gold); border-color: var(--gold-deep); }
+
+/* grown-up page */
+.mom h3 { font-size: 1.2rem; }
+.plan { background: var(--lav); border-radius: 18px; padding: 14px 16px; display: grid; gap: 6px; }
+.plan strong { font: 600 1.1rem var(--display); }
+.checks { display: grid; gap: 4px; }
+.checks label { display: flex; gap: 12px; align-items: center; min-height: 46px; cursor: pointer; }
+.checks input { width: 24px; height: 24px; accent-color: var(--purple); flex: none; }
+ol.routine, ul.tips { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; }
+ol.routine li::marker { color: var(--purple); font-weight: 700; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; }
+.field input, .field textarea { font: 400 1rem var(--text); color: var(--ink); background: var(--paper); border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; width: 100%; }
+.msg { font-size: 0.92rem; color: var(--ink-soft); min-height: 1.4em; }
+
+@media (max-width: 420px) {
+  .hero { grid-template-columns: 80px minmax(0, 1fr); }
+  .monkey { width: 80px; }
+  .sl { width: 46px; height: 60px; font-size: 2.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .monkey, .car.flash .sir, .carbtn.hintme .car, .mic.live { animation: none !important; }
+}
+</style>
+
+<div class="app">
+  <header>
+    <div class="brandrow">
+      <span class="brand">Monkey Police Academy</span>
+      <div class="tools">
+        <span id="rank" class="pill">Recruit</span>
+        <button id="soundBtn" class="icon-btn" type="button" aria-pressed="true">Sound on</button>
+      </div>
+    </div>
+    <div class="hero">
+      <div class="monkey" id="monkey"></div>
+      <p class="bubble" id="bubble"></p>
+    </div>
+  </header>
+  <main id="view" aria-live="polite"></main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- data ---------- */
+  var DEFAULT_WORDS = ['cat', 'fox', 'red', 'dog', 'sun', 'pig', 'hat', 'bus'];
+  var PICS = {
+    cat: '🐱', fox: '🦊', red: '🔴', dog: '🐶', sun: '☀️', pig: '🐷',
+    hat: '🎩', bus: '🚌', hen: '🐔', cup: '🥤', bed: '🛏️', map: '🗺️',
+    van: '🚐', cap: '🧢', bat: '🦇', ant: '🐜', bug: '🐛', cow: '🐄',
+    owl: '🦉', egg: '🥚', box: '📦', car: '🚗', key: '🔑', pen: '🖊️',
+    bee: '🐝', bag: '👜', rat: '🐀', ram: '🐏', jet: '✈️', cop: '👮',
+    fan: '🌀', pin: '📌', net: '🥅', web: '🕸️', ten: '🔟', toy: '🧸',
+    zoo: '🦁', zip: '🤐', run: '🏃', hug: '🤗', mom: '👩', dad: '👨',
+    ape: '🦍', ox: '🐂', fish: '🐟', frog: '🐸', duck: '🦆', bird: '🐦',
+    star: '⭐', moon: '🌙', tree: '🌳', book: '📘', ball: '⚽', cake: '🎂'
+  };
+  var NAMES = { a: 'ay', b: 'bee', c: 'see', d: 'dee', e: 'ee', f: 'eff', g: 'jee', h: 'aych', i: 'eye', j: 'jay', k: 'kay', l: 'ell', m: 'em', n: 'en', o: 'oh', p: 'pee', q: 'cue', r: 'are', s: 'ess', t: 'tee', u: 'you', v: 'vee', w: 'double you', x: 'ex', y: 'why', z: 'zee' };
+  /* Handwriting strokes for lowercase letters, in a box about 60 wide and 110 tall. Baseline at y=76, x-height at y=38. Each string is one pen stroke, in writing order. */
+  var G = {
+    a: ['M45.6 46.1A19 19 0 1 0 45.6 67.9', 'M49 38L49 76'],
+    b: ['M11 10L11 76', 'M11 57A19 19 0 1 1 49 57A19 19 0 1 1 11 57'],
+    c: ['M45.6 46.1A19 19 0 1 0 45.6 67.9'],
+    d: ['M45.6 46.1A19 19 0 1 0 45.6 67.9', 'M49 10L49 76'],
+    e: ['M11 57L49 57A19 19 0 1 0 45.6 67.9'],
+    f: ['M46 16Q44 8 36 8Q28 8 28 20L28 76', 'M14 38L44 38'],
+    g: ['M45.6 46.1A19 19 0 1 0 45.6 67.9', 'M49 38L49 92Q49 104 32 104Q22 104 16 98'],
+    h: ['M11 10L11 76', 'M11 58C14 44 22 38 32 38C44 38 48 46 48 58L48 76'],
+    i: ['M30 38L30 76', 'M30 21L30.1 21'],
+    j: ['M30 38L30 94Q30 105 18 104', 'M30 21L30.1 21'],
+    k: ['M12 10L12 76', 'M46 38L12 62', 'M24 54L48 76'],
+    l: ['M30 10L30 76'],
+    m: ['M8 38L8 76', 'M8 56C10 42 18 38 24 38C33 38 36 46 36 58L36 76', 'M36 56C38 42 46 38 52 38C61 38 64 46 64 58L64 76'],
+    n: ['M11 38L11 76', 'M11 58C14 44 22 38 32 38C44 38 48 46 48 58L48 76'],
+    o: ['M30 38A19 19 0 1 0 30 76A19 19 0 1 0 30 38'],
+    p: ['M11 38L11 104', 'M11 57A19 19 0 1 1 49 57A19 19 0 1 1 11 57'],
+    q: ['M45.6 46.1A19 19 0 1 0 45.6 67.9', 'M49 38L49 104'],
+    r: ['M14 38L14 76', 'M14 56C16 44 26 38 40 40'],
+    s: ['M44 44C40 38 16 36 16 48C16 58 44 56 44 68C44 80 18 78 14 70'],
+    t: ['M28 14L28 66Q28 77 40 76L46 73', 'M14 38L44 38'],
+    u: ['M14 38L14 62Q14 76 30 76Q46 76 46 64', 'M46 38L46 76'],
+    v: ['M12 38L30 76L48 38'],
+    w: ['M8 38L22 76L36 46L50 76L64 38'],
+    x: ['M14 38L46 76', 'M46 38L14 76'],
+    y: ['M12 38L30 72', 'M49 38L32 80Q24 100 12 102'],
+    z: ['M12 38L48 38L12 76L48 76']
+  };
+  var GW = { m: 72, w: 72 };
+  var STEPS = [
+    { k: 'siren', n: 'Sirens' }, { k: 'tap', n: 'Tap' }, { k: 'say', n: 'Say' },
+    { k: 'watch', n: 'Watch' }, { k: 'copy', n: 'Copy' }, { k: 'write', n: 'Write' }
+  ];
+  var RANKS = [{ n: 0, t: 'Recruit' }, { n: 6, t: 'Officer' }, { n: 18, t: 'Sergeant' }, { n: 30, t: 'Detective' }, { n: 48, t: 'Chief' }];
+  var PRAISE = ['Great job, Officer!', 'Case closed!', 'Super work!', 'Monkey salute!', 'You did it!'];
+  var KEY = 'mpa-v2';
+
+  /* ---------- state ---------- */
+  var state = { name: '', sound: true, words: DEFAULT_WORDS.slice(), done: {}, checks: {} };
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved && typeof saved === 'object') {
+      if (typeof saved.name === 'string') state.name = saved.name.slice(0, 24);
+      state.sound = saved.sound !== false;
+      if (Array.isArray(saved.words)) {
+        var okw = saved.words.filter(function (w) { return /^[a-z]{1,6}$/.test(w); }).slice(0, 24);
+        if (okw.length) state.words = okw;
+      }
+      if (saved.done && typeof saved.done === 'object') state.done = saved.done;
+      if (saved.checks && typeof saved.checks === 'object') state.checks = saved.checks;
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  /* ---------- helpers ---------- */
+  var view = document.getElementById('view');
+  var cleanup = null;
+  var actions = {};
+  var seq = 0;
+  function alive(t) { return t === seq; }
+  function byId(id) { return document.getElementById(id); }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function fin(a) { return a.finished.then(function () {}, function () {}); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pic(w) { return PICS[w] || '🐵'; }
+  function nm() { return state.name || 'Recruit'; }
+  function sk(w, k) { return 'S:' + w + ':' + k; }
+  function total() { return Object.keys(state.done).length; }
+  function rankFor(n) { var r = RANKS[0]; RANKS.forEach(function (x) { if (n >= x.n) r = x; }); return r; }
+  function stepsDone(w) { return STEPS.filter(function (s) { return state.done[sk(w, s.k)]; }).length; }
+  function nextOpenWord(after) {
+    var ws = state.words, start = after ? ws.indexOf(after) + 1 : 0, i;
+    for (i = start; i < ws.length; i++) if (!state.done[sk(ws[i], 'write')]) return ws[i];
+    if (!after) return ws[0];
+    return null;
+  }
+
+  var voiceBusy = false;
+  function sayP(text, rate) {
+    return new Promise(function (res) {
+      if (!state.sound || !('speechSynthesis' in window)) { setTimeout(res, Math.min(1500, 400 + text.length * 80)); return; }
+      var done = false;
+      text = text.replace(/\bay\b/gi, 'letter A');
+      function end() { if (!done) { done = true; res(); } }
+      try {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US'; u.rate = rate || 0.8; u.pitch = 1.15;
+        u.onend = end; u.onerror = end;
+        setTimeout(end, 2500 + text.length * 130);
+        window.speechSynthesis.speak(u);
+      } catch (e) { end(); }
+    });
+  }
+  function say(t, r) { sayP(t, r); }
+  var ac;
+  function tone(f, start, dur, type, vol) {
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, ac.currentTime + start);
+    g.gain.exponentialRampToValueAtTime(vol || 0.18, ac.currentTime + start + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + start + dur);
+    o.connect(g); g.connect(ac.destination);
+    o.start(ac.currentTime + start); o.stop(ac.currentTime + start + dur + 0.05);
+  }
+  function sfx(k) {
+    if (!state.sound) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') ac.resume();
+      if (k === 'tap') tone(660, 0, 0.1, 'triangle');
+      else if (k === 'good') [523, 659, 784].forEach(function (f, i) { tone(f, i * 0.09, 0.18, 'triangle'); });
+      else if (k === 'oops') tone(220, 0, 0.2, 'sine', 0.12);
+      else if (k === 'honk') { tone(400, 0, 0.12, 'square', 0.06); tone(500, 0.13, 0.16, 'square', 0.06); }
+      else if (k === 'siren') for (var i = 0; i < 6; i++) tone(i % 2 ? 880 : 660, i * 0.16, 0.15, 'square', 0.05);
+    } catch (e) {}
+  }
+
+  function monkeySVG() {
+    return '<svg viewBox="0 0 120 120" role="img" aria-label="Officer Monkey in a police cap">' +
+      '<circle cx="22" cy="68" r="14" fill="var(--monkey)"/><circle cx="22" cy="68" r="8" fill="var(--monkey-light)"/>' +
+      '<circle cx="98" cy="68" r="14" fill="var(--monkey)"/><circle cx="98" cy="68" r="8" fill="var(--monkey-light)"/>' +
+      '<circle cx="60" cy="70" r="38" fill="var(--monkey)"/>' +
+      '<ellipse cx="60" cy="80" rx="26" ry="22" fill="var(--monkey-light)"/>' +
+      '<circle cx="48" cy="66" r="6.5" fill="#fff"/><circle cx="72" cy="66" r="6.5" fill="#fff"/>' +
+      '<circle cx="49" cy="67" r="3.4" fill="#1b1030"/><circle cx="71" cy="67" r="3.4" fill="#1b1030"/>' +
+      '<ellipse cx="60" cy="78" rx="5" ry="3.4" fill="#7a4a30"/>' +
+      '<path d="M46 88 Q60 100 74 88" stroke="#7a4a30" stroke-width="3.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M26 48 Q26 12 60 12 Q94 12 94 48 Z" fill="var(--cap)"/>' +
+      '<path d="M30 46 H90 Q97 46 97 52 Q60 64 23 52 Q23 46 30 46 Z" fill="var(--cap-brim)"/>' +
+      '<polygon points="60,20 63.5,28 72,28.8 65.6,34.4 67.6,43 60,38.5 52.4,43 54.4,34.4 48,28.8 56.5,28" fill="#ffc21a"/>' +
+      '</svg>';
+  }
+  function carSVG() {
+    return '<svg viewBox="0 0 120 62" aria-hidden="true">' +
+      '<rect x="4" y="28" width="112" height="22" rx="9" fill="var(--carbody)"/>' +
+      '<path d="M24 28 L36 12 H84 L98 28 Z" fill="var(--carbody)"/>' +
+      '<path d="M33 27 L41 15 H58 V27 Z" fill="var(--glass)"/><path d="M63 27 V15 H81 L91 27 Z" fill="var(--glass)"/>' +
+      '<rect x="4" y="37" width="112" height="5" fill="#ffc21a"/>' +
+      '<rect x="47" y="3" width="13" height="9" rx="3" class="sir a"/><rect x="60" y="3" width="13" height="9" rx="3" class="sir b"/>' +
+      '<circle cx="32" cy="50" r="10" fill="#1b1030"/><circle cx="32" cy="50" r="4.5" fill="#d9ceff"/>' +
+      '<circle cx="90" cy="50" r="10" fill="#1b1030"/><circle cx="90" cy="50" r="4.5" fill="#d9ceff"/>' +
+      '<rect x="108" y="32" width="8" height="5" rx="2" fill="#fff6b0"/></svg>';
+  }
+  function letterPlate(l) { return '<b>' + esc(l) + '</b><i>' + esc(l.toUpperCase()) + '</i>'; }
+  function makeCar(plateHtml, flash) {
+    var d = document.createElement('div');
+    d.className = 'car' + (flash ? ' flash' : '');
+    d.innerHTML = '<div class="plate">' + plateHtml + '</div>' + carSVG();
+    return d;
+  }
+  function carW(W, n) { return Math.max(44, Math.min(116, Math.floor((W - 14 * (n + 1)) / n))); }
+
+  /* ---------- header ---------- */
+  function setBubble(t) { byId('bubble').textContent = t; }
+  function updateHeader() {
+    byId('monkey').innerHTML = monkeySVG();
+    var n = total();
+    byId('rank').textContent = rankFor(n).t + ' · ' + n + (n === 1 ? ' badge' : ' badges');
+    var sb = byId('soundBtn');
+    sb.textContent = state.sound ? 'Sound on' : 'Sound off';
+    sb.setAttribute('aria-pressed', state.sound ? 'true' : 'false');
+  }
+  byId('soundBtn').addEventListener('click', function () {
+    state.sound = !state.sound; save();
+    if (!state.sound && 'speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    updateHeader();
+  });
+  function celebrate(host, msg) {
+    var s = document.createElement('div');
+    s.className = 'stamp'; s.textContent = msg;
+    host.appendChild(s);
+    setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 1900);
+    sfx('siren');
+    var m = byId('monkey');
+    m.classList.remove('cheer'); void m.offsetWidth; m.classList.add('cheer');
+    setTimeout(function () { m.classList.remove('cheer'); }, 1000);
+  }
+  /* Marks one step of one case as done. Returns the new rank name if the rank went up. */
+  function markStep(word, k) {
+    var before = rankFor(total()).t;
+    var key = sk(word, k);
+    if (!state.done[key]) { state.done[key] = 1; save(); }
+    updateHeader();
+    var after = rankFor(total()).t;
+    return after !== before ? after : null;
+  }
+
+  /* ---------- letter pad: strokes, monkey demo, tracing ---------- */
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var measure = document.createElementNS(SVGNS, 'svg');
+  measure.setAttribute('width', '0'); measure.setAttribute('height', '0');
+  measure.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden';
+  document.body.appendChild(measure);
+  var strokeCache = {};
+  function strokeData(l) {
+    if (strokeCache[l]) return strokeCache[l];
+    var out = (G[l] || []).map(function (d) {
+      var p = document.createElementNS(SVGNS, 'path');
+      p.setAttribute('d', d); measure.appendChild(p);
+      var len = p.getTotalLength(), pts = [], s, q;
+      for (s = 0; s < len; s += 3) { q = p.getPointAtLength(s); pts.push([q.x, q.y]); }
+      q = p.getPointAtLength(len); pts.push([q.x, q.y]);
+      measure.removeChild(p);
+      return { d: d, len: len, pts: pts };
+    });
+    strokeCache[l] = out;
+    return out;
+  }
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  function LetterPad(host, letter, o) {
+    o = o || {};
+    var S = Math.max(240, Math.min(host.clientWidth || 320, 340));
+    var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    var wrap = document.createElement('div'); wrap.className = 'orb';
+    wrap.style.width = S + 'px'; wrap.style.height = S + 'px';
+    var cv = document.createElement('canvas');
+    cv.width = S * dpr; cv.height = S * dpr; cv.style.width = S + 'px'; cv.style.height = S + 'px';
+    cv.setAttribute('aria-label', letter ? 'Writing circle' : 'Monkey circle');
+    wrap.appendChild(cv); host.appendChild(wrap);
+    var ctx = cv.getContext('2d');
+    var strokes = letter ? strokeData(letter) : [];
+    var paths = strokes.map(function (s) { return new Path2D(s.d); });
+    var bx0 = 1e9, bx1 = -1e9, by0 = 1e9, by1 = -1e9;
+    strokes.forEach(function (s) { s.pts.forEach(function (q) { bx0 = Math.min(bx0, q[0]); bx1 = Math.max(bx1, q[0]); by0 = Math.min(by0, q[1]); by1 = Math.max(by1, q[1]); }); });
+    if (!strokes.length) { bx0 = 0; bx1 = 60; by0 = 10; by1 = 76; }
+    var k = S * 0.6 / Math.max(66, by1 - by0, (bx1 - bx0) * 1.1), offX = S / 2 - ((bx0 + bx1) / 2) * k, offY = S / 2 - ((by0 + by1) / 2) * k;
+    var guide = o.guide !== false, interactive = false, finished = false, tok = 0, destroyed = false;
+    var keepDrawn = false, demo = null, mon = null, orbitOn = false, ink = [], cur = null, drawing = false, inside = 0, outside = 0;
+    var covered = strokes.map(function (s) { return new Uint8Array(s.pts.length); });
+    var cnt = strokes.map(function () { return 0; });
+    var sdone = strokes.map(function () { return false; });
+    var pulse = null;
+    var EMOJI = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+
+    function activeIdx() { for (var i = 0; i < strokes.length; i++) if (!sdone[i]) return i; return -1; }
+    function redraw() {
+      if (destroyed) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, S, S);
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      if (orbitOn) {
+        ctx.beginPath(); ctx.arc(S / 2, S / 2, S * 0.36, 0, 6.3);
+        ctx.setLineDash([2, 14]); ctx.strokeStyle = css('--guide-line'); ctx.lineWidth = 5; ctx.stroke(); ctx.setLineDash([]);
+      }
+      if (strokes.length) {
+        ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * offX, dpr * offY);
+        if (guide) {
+          strokes.forEach(function (s, i) {
+            if (sdone[i]) { ctx.setLineDash([]); ctx.strokeStyle = css('--guide-done'); ctx.lineWidth = 8; }
+            else { ctx.setLineDash([0.1, 11]); ctx.strokeStyle = css('--guide-line'); ctx.lineWidth = 6; }
+            ctx.stroke(paths[i]);
+          });
+          ctx.setLineDash([]);
+        }
+        if (keepDrawn) {
+          ctx.strokeStyle = css('--demo'); ctx.lineWidth = 9; ctx.setLineDash([]);
+          strokes.forEach(function (s, i) { ctx.stroke(paths[i]); });
+        }
+        if (demo) {
+          ctx.strokeStyle = css('--demo'); ctx.lineWidth = 9; ctx.setLineDash([]);
+          strokes.forEach(function (s, i) {
+            if (i < demo.si) ctx.stroke(paths[i]);
+            else if (i === demo.si && demo.p > 0) {
+              ctx.setLineDash([Math.max(0.05, s.len * demo.p), s.len * 2 + 30]); ctx.stroke(paths[i]); ctx.setLineDash([]);
+            }
+          });
+        }
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.strokeStyle = css('--stroke'); ctx.fillStyle = css('--stroke'); ctx.lineWidth = S * 0.05; ctx.setLineDash([]);
+      ink.forEach(function (st) {
+        if (st.length === 1) { ctx.beginPath(); ctx.arc(st[0][0], st[0][1], S * 0.025, 0, 7); ctx.fill(); return; }
+        ctx.beginPath(); ctx.moveTo(st[0][0], st[0][1]);
+        for (var i = 1; i < st.length; i++) ctx.lineTo(st[i][0], st[i][1]);
+        ctx.stroke();
+      });
+      if (interactive && guide && !finished) {
+        var ai = activeIdx();
+        if (ai >= 0) {
+          var p0 = strokes[ai].pts[0], x = offX + p0[0] * k, y = offY + p0[1] * k, pu = 0.5 + 0.5 * Math.sin(Date.now() / 160);
+          ctx.beginPath(); ctx.arc(x, y, S * 0.04 + pu * 4, 0, 7);
+          ctx.fillStyle = css('--gold'); ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = '#3a2a00'; ctx.stroke();
+          if (strokes.length > 1) {
+            ctx.fillStyle = '#3a2a00'; ctx.font = '700 ' + Math.round(S * 0.05) + 'px Fredoka, sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(ai + 1), x, y + 1);
+          }
+        }
+      }
+      var m = mon;
+      if (!m && !demo && !orbitOn && o.monkey !== false) m = { x: S * 0.76, y: S * 0.78 };
+      if (demo && strokes[demo.si]) {
+        var pts = strokes[demo.si].pts, pi = Math.min(pts.length - 1, Math.floor(demo.p * (pts.length - 1)));
+        m = { x: offX + pts[pi][0] * k + S * 0.07, y: offY + pts[pi][1] * k - S * 0.06 };
+      }
+      if (m) {
+        ctx.font = Math.round(S * 0.13) + 'px ' + EMOJI; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000'; ctx.fillText('🐒', m.x, m.y);
+      }
+    }
+    function pt(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * (S / r.width), (e.clientY - r.top) * (S / r.height)]; }
+    function mark(px, py) {
+      var lx = (px - offX) / k, ly = (py - offY) / k, r = S * 0.09 / k, r2 = r * r, near = false, i, j;
+      for (i = 0; i < strokes.length; i++) {
+        var pts = strokes[i].pts;
+        for (j = 0; j < pts.length; j++) {
+          var dx = pts[j][0] - lx, dy = pts[j][1] - ly, d2 = dx * dx + dy * dy;
+          if (d2 < r2 && !covered[i][j]) { covered[i][j] = 1; cnt[i]++; }
+          if (d2 < r2 * 2.8) near = true;
+        }
+        if (!sdone[i] && cnt[i] / pts.length >= 0.85 && covered[i][pts.length - 1]) { sdone[i] = true; sfx('tap'); }
+      }
+      if (near) inside++; else outside++;
+    }
+    function check() {
+      if (finished || !strokes.length) return;
+      var thr = guide ? 0.85 : 0.75, i, ok = true, tot = inside + outside;
+      for (i = 0; i < strokes.length; i++) {
+        var cv2 = covered[i], last = cv2.length - 1;
+        if (cnt[i] / strokes[i].pts.length < thr || !cv2[0] || !cv2[last]) ok = false;
+      }
+      if (ok && tot >= 5 && inside / tot >= 0.3) {
+        finished = true; drawing = false; interactive = false; redraw();
+        if (o.onDone) setTimeout(o.onDone, 350);
+      }
+    }
+    cv.addEventListener('pointerdown', function (e) {
+      if (!interactive || finished) return;
+      e.preventDefault();
+      try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+      drawing = true; var p = pt(e); cur = [p]; ink.push(cur); mark(p[0], p[1]); redraw();
+    });
+    cv.addEventListener('pointermove', function (e) {
+      if (!drawing || finished) return;
+      e.preventDefault();
+      var p = pt(e), q = cur[cur.length - 1], dx = p[0] - q[0], dy = p[1] - q[1];
+      var n = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 5));
+      for (var i = 1; i <= n; i++) mark(q[0] + dx * i / n, q[1] + dy * i / n);
+      cur.push(p); redraw();
+    });
+    function up() { var was = drawing; drawing = false; if (was) check(); }
+    cv.addEventListener('pointerup', up);
+    cv.addEventListener('pointercancel', up);
+
+    function strokeDur(i, sp) { return Math.max(500, Math.min(1500, strokes[i].len * 17)) / sp; }
+    var api = {
+      wrap: wrap,
+      demo: function (sp) {
+        sp = sp || 1; var my = ++tok; interactive = false; orbitOn = false; mon = null;
+        return new Promise(function (res) {
+          if (!strokes.length) { res(true); return; }
+          var si = 0, start = performance.now(), dur = strokeDur(0, sp);
+          function frame(now) {
+            if (destroyed || my !== tok) { demo = null; res(false); return; }
+            var p = Math.max(0, Math.min(1, (now - start) / dur));
+            demo = { si: si, p: p }; redraw();
+            if (p >= 1) {
+              si++;
+              if (si >= strokes.length) { demo = null; if (o.keep) keepDrawn = true; redraw(); res(true); return; }
+              start = now + 220 / sp; dur = strokeDur(si, sp);
+            }
+            requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+        });
+      },
+      orbit: function (ms) {
+        var my = ++tok; orbitOn = true; demo = null;
+        return new Promise(function (res) {
+          var t0 = performance.now(), R = S * 0.36;
+          function frame(now) {
+            if (destroyed || my !== tok) { orbitOn = false; mon = null; res(false); return; }
+            var p = Math.min(1, (now - t0) / ms), a = -Math.PI / 2 + p * Math.PI * 4;
+            mon = { x: S / 2 + R * Math.cos(a), y: S / 2 + R * Math.sin(a) }; redraw();
+            if (p >= 1) { orbitOn = false; mon = null; redraw(); res(true); return; }
+            requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+        });
+      },
+      setGuide: function (g) { guide = g; redraw(); },
+      setInteractive: function (b) {
+        interactive = b && !finished;
+        if (pulse) { clearInterval(pulse); pulse = null; }
+        if (interactive && guide) pulse = setInterval(redraw, 120);
+        redraw();
+      },
+      reset: function () {
+        ink = []; cur = null; inside = 0; outside = 0; finished = false;
+        covered = strokes.map(function (s) { return new Uint8Array(s.pts.length); });
+        cnt = strokes.map(function () { return 0; }); sdone = strokes.map(function () { return false; });
+        redraw();
+      },
+      destroy: function () { destroyed = true; tok++; if (pulse) clearInterval(pulse); if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }
+    };
+    redraw();
+    return api;
+  }
+
+  /* ---------- voice check ---------- */
+  function lev(a, b) {
+    var m = [], i, j;
+    for (i = 0; i <= a.length; i++) m[i] = [i];
+    for (j = 1; j <= b.length; j++) m[0][j] = j;
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return m[a.length][b.length];
+  }
+  function heardMatch(heard, target) {
+    var toks = heard.toLowerCase().split(/[^a-z]+/).filter(Boolean), joined = toks.join(''), tol = target.length >= 3 ? 1 : 0, i;
+    if (joined.indexOf(target) >= 0) return true;
+    for (i = 0; i < toks.length; i++) if (lev(toks[i], target) <= tol) return true;
+    return lev(joined, target) <= tol;
+  }
+  function listen(target, cb) {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition, done = false;
+    function end(r) { if (!done) { done = true; cb(r); } }
+    if (!SR) { end({ ok: false, err: 'unsupported' }); return null; }
+    try {
+      var r = new SR();
+      r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 5;
+      r.onresult = function (e) {
+        var res = e.results[0], alts = [], i;
+        for (i = 0; i < res.length; i++) alts.push(res[i].transcript);
+        end({ ok: alts.some(function (a) { return heardMatch(a, target); }), heard: alts[0] || '' });
+      };
+      r.onerror = function (e) { end({ ok: false, err: e.error || 'error' }); };
+      r.onend = function () { end({ ok: false, err: 'nospeech' }); };
+      r.start();
+      return r;
+    } catch (e) { end({ ok: false, err: 'unsupported' }); return null; }
+  }
+
+  /* ---------- case steps ---------- */
+  var STEP = {};
+  function picbox(w, shown) {
+    return '<div class="picbox"><span class="bigpic" id="bigpic">' + (shown ? pic(w) : '🔊') + '</span><span class="wordtxt" id="wordtxt">' + (shown ? esc(w) : '') + '</span></div>';
+  }
+  function reveal(w) {
+    var b = byId('bigpic'); if (!b) return;
+    b.textContent = pic(w); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+    byId('wordtxt').textContent = w;
+  }
+  function spellHtml(w, filled) {
+    return w.split('').map(function (ch) { return '<span class="sl">' + (filled ? esc(ch) : '') + '</span>'; }).join('');
+  }
+  function setSpell(i, l) {
+    var el = byId('spell'); if (!el || !el.children[i]) return;
+    var s = el.children[i]; s.textContent = l; s.classList.remove('pop'); void s.offsetWidth; s.classList.add('pop');
+  }
+  function spokenLetters(w) { return w.split('').map(function (l) { return NAMES[l]; }).join(', '); }
+
+  /* 1. Sirens: a police car arrives and says the word, then three cars cross saying each letter, then they park together. */
+  STEP.siren = function (c) {
+    var w = c.word, st = c.stage, n = w.length;
+    st.innerHTML = picbox(w, false) + '<div class="track" id="track" role="img" aria-label="Police cars driving across a road"></div>' +
+      '<div class="spell" id="spell">' + spellHtml(w, false) + '</div><div class="btnrow" id="ctl"></div>';
+    setBubble('Press the button and listen to the sirens!');
+    var ctl = byId('ctl'), tk = c.tk;
+    function begin() {
+      ctl.innerHTML = '<button class="btn gold big" type="button" id="go">Start the siren!</button>';
+      byId('go').onclick = run;
+    }
+    async function run() {
+      ctl.innerHTML = '';
+      byId('bigpic').textContent = '🔊'; byId('wordtxt').textContent = '';
+      byId('spell').innerHTML = spellHtml(w, false);
+      var track = byId('track'), W = track.clientWidth, cw = carW(W, n);
+      track.style.setProperty('--cw', cw + 'px'); track.innerHTML = '<div class="lane"></div>';
+      var lead = makeCar('<span class="em">' + pic(w) + '</span>', true); track.appendChild(lead);
+      var cx = (W - cw) / 2, a, i;
+      sfx('siren');
+      a = lead.animate([{ transform: 'translateX(' + (-cw - 12) + 'px)' }, { transform: 'translateX(' + cx + 'px)' }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
+      await fin(a); if (!alive(tk)) return;
+      await sayP(w + '!'); if (!alive(tk)) return;
+      reveal(w); await wait(900); if (!alive(tk)) return;
+      a = lead.animate([{ transform: 'translateX(' + cx + 'px)' }, { transform: 'translateX(' + (W + 12) + 'px)' }], { duration: 1200, easing: 'ease-in', fill: 'forwards' });
+      await fin(a); if (!alive(tk)) return;
+      lead.remove();
+      for (i = 0; i < n; i++) {
+        var l = w[i], car = makeCar(letterPlate(l), true); track.appendChild(car);
+        var an = car.animate([{ transform: 'translateX(' + (-cw - 12) + 'px)' }, { transform: 'translateX(' + (W + 12) + 'px)' }], { duration: 3400, easing: 'linear', fill: 'forwards' });
+        await wait(1200); if (!alive(tk)) return;
+        setSpell(i, l); await sayP(NAMES[l]); if (!alive(tk)) return;
+        await fin(an); if (!alive(tk)) return;
+        car.remove();
+      }
+      var gap = (W - n * cw) / (n + 1), anims = [];
+      for (i = 0; i < n; i++) {
+        var cc = makeCar(letterPlate(w[i]), true); track.appendChild(cc);
+        var x = gap * (i + 1) + cw * i;
+        anims.push(cc.animate([{ transform: 'translateX(' + (x - W - cw - 12) + 'px)' }, { transform: 'translateX(' + x + 'px)' }], { duration: 2000, easing: 'ease-out', fill: 'forwards' }));
+      }
+      sfx('siren');
+      await Promise.all(anims.map(fin)); if (!alive(tk)) return;
+      await sayP(w + '!'); if (!alive(tk)) return;
+      reveal(w);
+      var up = markStep(w, 'siren');
+      if (up) celebrate(c.stage, 'NEW RANK: ' + up.toUpperCase());
+      c.refresh();
+      ctl.innerHTML = '<button class="btn ghost small" type="button" id="again">Watch again</button><button class="btn gold" type="button" id="nx">Next: tap the cars</button>';
+      byId('again').onclick = function () { c.go(c.index); };
+      byId('nx').onclick = function () { c.next(); };
+    }
+    begin();
+  };
+
+  /* 2. Tap the cars in letter order. */
+  STEP.tap = function (c) {
+    var w = c.word, st = c.stage, n = w.length, tk = c.tk, placed = 0, wrong = 0, busy = false;
+    var order = w.split('').map(function (ch, i) { return { ch: ch, i: i, used: false }; });
+    var lot = shuffle(order);
+    for (var t = 0; t < 6 && n > 1 && lot.map(function (x) { return x.ch; }).join('') === w; t++) lot = shuffle(order);
+    st.innerHTML = picbox(w, true) + '<div class="spell" id="spell">' + spellHtml(w, false) + '</div>' +
+      '<p class="center" style="font-weight:700">Tap the cars in order: ' + w.split('').map(function (l) { return esc(l); }).join(', then ') + '</p>' +
+      '<div class="lot" id="lot"></div><p class="status" id="status" role="status"></p><div class="btnrow" id="ctl"></div>';
+    setBubble('Tap the cars in order. Which letter comes first?');
+    var lotEl = byId('lot'), W = lotEl.clientWidth || 300, cw = carW(W, Math.min(n, 4));
+    lotEl.style.setProperty('--cw', cw + 'px');
+    lot.forEach(function (it, idx) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'carbtn'; b.dataset.idx = idx;
+      b.setAttribute('aria-label', 'Letter ' + it.ch);
+      b.appendChild(makeCar(letterPlate(it.ch), false)); lotEl.appendChild(b);
+    });
+    lotEl.addEventListener('click', async function (e) {
+      var b = e.target.closest('.carbtn');
+      if (!b || busy || placed >= n || !alive(tk)) return;
+      var it = lot[+b.dataset.idx];
+      if (it.used) return;
+      if (it.ch === w[placed]) {
+        busy = true; it.used = true; sfx('honk');
+        b.querySelector('.car').classList.add('flash'); b.disabled = true;
+        b.style.opacity = '0.35'; b.classList.remove('hintme');
+        setSpell(placed, it.ch); placed++; wrong = 0;
+        await sayP(NAMES[it.ch], 0.9); if (!alive(tk)) return;
+        if (placed === n) {
+          byId('status').textContent = 'You did it! ' + w + '!';
+          await sayP(w + '!'); if (!alive(tk)) return;
+          var up = markStep(w, 'tap');
+          celebrate(st, up ? 'NEW RANK: ' + up.toUpperCase() : 'GREAT TAPPING!');
+          c.refresh();
+          byId('ctl').innerHTML = '<button class="btn gold" type="button" id="nx">Next: say it</button>';
+          byId('nx').onclick = function () { c.next(); };
+        }
+        busy = false;
+      } else {
+        sfx('oops'); b.classList.remove('wob'); void b.offsetWidth; b.classList.add('wob'); wrong++;
+        byId('status').textContent = 'Try again. Look for ' + w[placed] + '.';
+        say('Try again. Find ' + NAMES[w[placed]] + '.');
+        if (wrong >= 2) {
+          Array.prototype.forEach.call(lotEl.children, function (x) { x.classList.remove('hintme'); });
+          var target = lot.filter(function (x) { return !x.used && x.ch === w[placed]; })[0];
+          if (target) lotEl.children[lot.indexOf(target)].classList.add('hintme');
+        }
+      }
+    });
+    setTimeout(function () { if (alive(tk)) say('Tap the cars in order. ' + spokenLetters(w) + '.'); }, 300);
+  };
+
+  /* 3. Say it. Voice check is tried; a grown-up button always works. */
+  STEP.say = function (c) {
+    var w = c.word, st = c.stage, tk = c.tk, fails = 0, rec = null, listening = false;
+    st.innerHTML = picbox(w, true) + '<div class="spell" id="spell">' + spellHtml(w, true) + '</div>' +
+      '<p class="center" style="font-weight:700;font-size:1.15rem">Say it: ' + w.split('').map(function (l) { return NAMES[l]; }).join(', ') + ', ' + esc(w) + '!</p>' +
+      '<button class="mic" type="button" id="mic"><span class="ico" aria-hidden="true">🎤</span><span id="miclabel">Tap and say it</span></button>' +
+      '<p class="status" id="status" role="status"></p>' +
+      '<div class="btnrow"><button class="btn ghost small" type="button" id="hear">Hear the monkey say it</button><button class="btn gold small" type="button" id="ok">She said it!</button></div>' +
+      '<p class="hint center">The microphone check only works in some browsers. If it does not hear her, a grown-up taps the gold button.</p>' +
+      '<div class="btnrow" id="ctl"></div>';
+    setBubble('Say it with me!');
+    function success(viaMic) {
+      if (!alive(tk)) return;
+      sfx('good');
+      var up = markStep(w, 'say');
+      celebrate(st, up ? 'NEW RANK: ' + up.toUpperCase() : (viaMic ? 'I HEARD YOU!' : 'WELL SAID!'));
+      c.refresh();
+      byId('ctl').innerHTML = '<button class="btn gold" type="button" id="nx">Next: watch the monkey write</button>';
+      byId('nx').onclick = function () { c.next(); };
+      byId('status').textContent = 'Super! ' + w + '!';
+    }
+    byId('hear').onclick = function () { say(spokenLetters(w) + '. ' + w + '!'); };
+    byId('ok').onclick = function () { success(false); };
+    byId('mic').onclick = function () {
+      if (listening) return;
+      listening = true;
+      var mic = byId('mic'); mic.classList.add('live'); byId('miclabel').textContent = 'Listening...';
+      byId('status').textContent = '';
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+      rec = listen(w, function (r) {
+        listening = false;
+        if (!alive(tk)) return;
+        mic.classList.remove('live'); byId('miclabel').textContent = 'Tap and say it';
+        if (r.ok) { success(true); return; }
+        if (r.err === 'not-allowed' || r.err === 'service-not-allowed' || r.err === 'unsupported' || r.err === 'audio-capture') {
+          byId('status').textContent = 'The microphone is not available here. A grown-up taps the gold button.'; return;
+        }
+        fails++;
+        if (r.heard) byId('status').textContent = 'I heard "' + r.heard + '". Try once more!';
+        else byId('status').textContent = 'I did not hear anything. Try again, a bit louder.';
+        if (fails >= 2) byId('status').textContent += ' Or a grown-up taps the gold button.';
+      });
+    };
+    setTimeout(function () { if (alive(tk)) say('Now you say it. ' + spokenLetters(w) + '. ' + w + '!'); }, 300);
+    c.onLeave(function () { try { if (rec) rec.abort(); } catch (e) {} });
+  };
+
+  /* 4. Watch: the monkey runs round the circle, then writes each letter. */
+  STEP.watch = function (c) {
+    var w = c.word, st = c.stage, tk = c.tk, pad = null;
+    st.innerHTML = '<div class="orbhost" id="orbhost"></div><div class="spell" id="spell">' + spellHtml(w, false) + '</div>' +
+      '<p class="status" id="status" role="status">Watch Officer Monkey write.</p><div class="btnrow" id="ctl"></div>';
+    setBubble('Watch me write!');
+    c.onLeave(function () { if (pad) pad.destroy(); });
+    async function run() {
+      var host = byId('orbhost'), i;
+      byId('ctl').innerHTML = ''; byId('spell').innerHTML = spellHtml(w, false); host.innerHTML = '';
+      pad = LetterPad(host, null, { monkey: false });
+      sfx('siren');
+      await pad.orbit(2400); if (!alive(tk)) return;
+      for (i = 0; i < w.length; i++) {
+        pad.destroy(); host.innerHTML = '';
+        pad = LetterPad(host, w[i], { guide: false, keep: true });
+        await wait(300); if (!alive(tk)) return;
+        var ok = await pad.demo(1); if (!ok || !alive(tk)) return;
+        setSpell(i, w[i]); await sayP(NAMES[w[i]]); if (!alive(tk)) return;
+        await wait(250); if (!alive(tk)) return;
+      }
+      pad.destroy(); host.innerHTML = '';
+      var fb = document.createElement('div'); fb.className = 'orb final'; fb.style.width = '240px'; fb.style.height = '240px';
+      fb.innerHTML = '<span class="bigpic pop">' + pic(w) + '</span><span class="wordtxt">' + esc(w) + '</span>';
+      host.appendChild(fb);
+      await sayP(w + '!'); if (!alive(tk)) return;
+      var up = markStep(w, 'watch');
+      if (up) celebrate(st, 'NEW RANK: ' + up.toUpperCase());
+      c.refresh();
+      byId('status').textContent = 'Now it is your turn to write with me!';
+      byId('ctl').innerHTML = '<button class="btn ghost small" type="button" id="again">Watch again</button><button class="btn gold" type="button" id="nx">Next: write with the monkey</button>';
+      byId('again').onclick = function () { c.go(c.index); };
+      byId('nx').onclick = function () { c.next(); };
+    }
+    run();
+  };
+
+  /* Shared by steps 5 and 6: one letter at a time in the round pad. */
+  function writeLetters(c, mode) {
+    var w = c.word, st = c.stage, tk = c.tk, n = w.length, li = 0, pad = null, token = 0;
+    var copy = mode === 'copy';
+    st.innerHTML = '<div class="picbox" style="min-height:0"><span class="bigpic" style="font-size:3.4rem">' + pic(w) + '</span></div>' +
+      '<div class="orbhost" id="orbhost"></div><div class="dots" id="dots"></div>' +
+      '<p class="status" id="status" role="status"></p><div class="btnrow" id="ctl"></div>';
+    c.onLeave(function () { token++; if (pad) pad.destroy(); });
+    function dots() { byId('dots').innerHTML = w.split('').map(function (ch, i) { return '<i class="' + (i < li ? 'on' : '') + '"></i>'; }).join(''); }
+    async function letter() {
+      var my = ++token, l = w[li], host = byId('orbhost');
+      dots();
+      if (pad) pad.destroy(); host.innerHTML = '';
+      byId('ctl').innerHTML = '';
+      byId('status').textContent = copy ? 'Watch the monkey, then follow the dots.' : 'Watch once, then write it yourself.';
+      pad = LetterPad(host, l, { guide: copy, onDone: function () { if (my === token) letterDone(); } });
+      say(copy ? 'Watch me. Then you write ' + NAMES[l] + '.' : 'Now you write ' + NAMES[l] + '.');
+      await wait(900); if (!alive(tk) || my !== token) return;
+      var ok = await pad.demo(copy ? 1 : 1.5); if (!ok || !alive(tk) || my !== token) return;
+      pad.setInteractive(true);
+      byId('status').textContent = copy ? 'Your turn! Start at the gold dot.' : 'Your turn! Write the letter. No dots this time!';
+      var html = '<button class="btn ghost small" type="button" id="again">Monkey again</button>';
+      if (!copy) html += '<button class="btn ghost small" type="button" id="peek">Peek at the dots</button><button class="btn gold small" type="button" id="done">She wrote it</button>';
+      else html += '<button class="btn ghost small" type="button" id="skip">Skip this letter</button>';
+      byId('ctl').innerHTML = html;
+      byId('again').onclick = async function () { pad.setInteractive(false); pad.reset(); var okk = await pad.demo(1); if (okk && alive(tk) && my === token) pad.setInteractive(true); };
+      if (!copy) {
+        byId('peek').onclick = function () { pad.setGuide(true); setTimeout(function () { if (my === token) pad.setGuide(false); }, 2500); };
+        byId('done').onclick = function () { letterDone(); };
+      } else byId('skip').onclick = function () { letterDone(); };
+    }
+    async function letterDone() {
+      var my = token; token++;
+      if (pad) pad.setInteractive(false);
+      sfx('good'); await sayP(NAMES[w[li]], 0.9); if (!alive(tk)) return;
+      li++; dots();
+      if (li < n) { letter(); return; }
+      if (pad) pad.destroy();
+      var host = byId('orbhost'); host.innerHTML = '';
+      var fb = document.createElement('div'); fb.className = 'orb final'; fb.style.width = '240px'; fb.style.height = '240px';
+      fb.innerHTML = '<span class="bigpic pop">' + pic(w) + '</span><span class="wordtxt">' + esc(w) + '</span>';
+      host.appendChild(fb);
+      byId('ctl').innerHTML = ''; byId('status').textContent = '';
+      sayP(w + '!');
+      var up = markStep(w, mode);
+      c.refresh();
+      if (copy) {
+        celebrate(st, up ? 'NEW RANK: ' + up.toUpperCase() : 'NICE WRITING!');
+        byId('status').textContent = 'You wrote ' + w + ' with the monkey!';
+        byId('ctl').innerHTML = '<button class="btn gold" type="button" id="nx">Next: write it by yourself</button>';
+        byId('nx').onclick = function () { c.next(); };
+      } else c.caseClosed(up);
+    }
+    letter();
+  }
+  STEP.copy = function (c) { setBubble('Write with me! Follow the dots.'); writeLetters(c, 'copy'); };
+  STEP.write = function (c) { setBubble('Now write all by yourself!'); writeLetters(c, 'write'); };
+
+  /* ---------- views ---------- */
+  var VIEWS = {};
+
+  VIEWS.home = function () {
+    setBubble('Report for duty, ' + nm() + '! Ready for a case?');
+    var words = state.words, next = nextOpenWord(null), n = total(), r = rankFor(n), nr = null;
+    RANKS.forEach(function (x) { if (!nr && x.n > n) nr = x; });
+    var allDone = words.every(function (w) { return state.done[sk(w, 'write')]; });
+    view.innerHTML =
+      '<div class="cta"><h2>' + (allDone ? 'All cases closed!' : 'New case: the ' + esc(pic(next)) + ' mystery') + '</h2>' +
+      '<p>' + (allDone ? 'Play any case again to practise.' : 'Sirens, cars and a writing monkey. About five minutes. Turn the sound on!') + '</p>' +
+      '<div class="row"><span class="pic" aria-hidden="true">' + pic(next) + '</span><a class="btn gold big" href="#case-' + next + '">' + (allDone ? 'Play again' : 'Start the case!') + '</a></div></div>' +
+      '<div class="card"><h3>Case files</h3><div class="cases">' + words.map(function (w) {
+        var d = stepsDone(w);
+        return '<a class="casecard" href="#case-' + w + '"><span class="pic" aria-hidden="true">' + pic(w) + '</span><b>' + esc(w) + '</b><span class="pips" role="img" aria-label="' + d + ' of 6 steps done">' +
+          STEPS.map(function (s) { return '<i class="' + (state.done[sk(w, s.k)] ? 'on' : '') + '"></i>'; }).join('') + '</span></a>';
+      }).join('') + '</div></div>' +
+      '<div class="card"><div class="ranks"><h3>' + r.t + '</h3><span class="hint">' + n + ' badges' + (nr ? ' · ' + (nr.n - n) + ' more for ' + nr.t : ' · top rank!') + '</span></div></div>' +
+      '<a class="btn ghost" href="#mom">For the grown-up: plan and word list</a>';
+  };
+
+  VIEWS.case = function (word) {
+    var cur = -1, leaveFns = [], closed = false;
+    view.innerHTML = '<div class="app" style="gap:14px"><div class="topbar"><a class="back" href="#home">Home</a><h2>Case file ' + pic(word) + '</h2></div>' +
+      '<div class="steps" id="steps" role="group" aria-label="Case steps"></div><div class="card" id="stage"></div></div>';
+    var stage = byId('stage');
+    function refresh() {
+      byId('steps').innerHTML = STEPS.map(function (s, i) {
+        return '<button type="button" class="step' + (i === cur ? ' on' : '') + (state.done[sk(word, s.k)] ? ' ok' : '') + '" data-act="step" data-i="' + i + '">' + (i + 1) + '. ' + s.n + '</button>';
+      }).join('');
+    }
+    function leave() { leaveFns.forEach(function (f) { try { f(); } catch (e) {} }); leaveFns = []; }
+    function go(i) {
+      seq++; var tk = seq;
+      leave(); try { window.speechSynthesis.cancel(); } catch (e) {}
+      cur = i; closed = false; refresh(); stage.innerHTML = '';
+      var c = {
+        word: word, stage: stage, tk: tk, index: i, refresh: refresh, go: go,
+        next: function () { if (i < STEPS.length - 1) go(i + 1); },
+        onLeave: function (f) { leaveFns.push(f); },
+        caseClosed: caseClosed
+      };
+      STEP[STEPS[i].k](c);
+      window.scrollTo(0, 0);
+    }
+    function caseClosed(up) {
+      var nxt = nextOpenWord(word);
+      stage.innerHTML = '<div class="picbox"><span class="bigpic pop">' + pic(word) + '</span><span class="wordtxt">' + esc(word) + '</span></div>' +
+        '<h2 class="center">Case closed!</h2>' +
+        '<p class="center">Last mission: write <b>' + esc(word) + '</b> on paper with a crayon. A grown-up can say the word, and she writes it.</p>' +
+        '<div class="btnrow">' + (nxt ? '<a class="btn gold" href="#case-' + nxt + '">Next case: ' + pic(nxt) + '</a>' : '') + '<a class="btn ghost" href="#home">Back to the case files</a></div>';
+      setBubble('Case closed! Great work, ' + nm() + '!');
+      celebrate(stage, up ? 'NEW RANK: ' + up.toUpperCase() : 'CASE CLOSED!');
+      refresh();
+    }
+    actions = { step: function (t) { go(+t.dataset.i); } };
+    var first = 0, i;
+    for (i = 0; i < STEPS.length; i++) if (!state.done[sk(word, STEPS[i].k)]) { first = i; break; }
+    go(first);
+    return function () { seq++; leave(); };
+  };
+
+  VIEWS.mom = function () {
+    setBubble('Welcome, grown-up. Here is the plan.');
+    var checks = [
+      ['k1', 'She holds a crayon and draws lines and circles'],
+      ['k2', 'She knows the names of most letters when she sees them'],
+      ['k3', 'She can copy a circle and a straight line'],
+      ['k4', 'She can copy a letter when you write it first'],
+      ['k5', 'She can write c-a-t when she hears the word']
+    ];
+    function plan() {
+      var c = state.checks;
+      if (!c.k1) return ['Steps 1 to 3 only, for a week', 'Sirens, Tap and Say need no writing at all. Do one word a day. Separately, give her a fat crayon and let her scribble circles and zigzags on paper for fun.'];
+      if (!c.k2) return ['Steps 1 to 4', 'Sirens, Tap, Say and Watch. After the monkey writes each letter, say its sound together (cuh, a, tuh). Skip the writing steps for now.'];
+      if (!c.k3) return ['Steps 1 to 5, with easy words first', 'Start with words made of round and straight letters, like cat, dog and sun. In Copy, she only needs to cover the dots. Skip a letter if it frustrates her.'];
+      if (!c.k4) return ['Use Copy every day', 'Do steps 1 to 5. Skip step 6 for now. Finish by copying one word on paper next to your example.'];
+      if (!c.k5) return ['Use Write every day', 'Do all six steps for one word, then she writes that word on paper with the example covered.'];
+      return ['Practise the real bee', 'Do step 6 for three words a day, then play spelling bee on paper: you say the word, she writes it, you clap.'];
+    }
+    function render() {
+      var p = plan();
+      view.innerHTML = '<div class="app mom" style="gap:14px"><div class="topbar"><a class="back" href="#home">Home</a><h2>For the grown-up</h2></div>' +
+        '<div class="card"><h3>How one case works</h3><ol class="routine">' +
+        '<li><b>Sirens.</b> A police car arrives and says the word. Three cars cross, each saying one letter, then they park together and say the word. The picture shows every time the word is said.</li>' +
+        '<li><b>Tap.</b> She taps the cars in letter order. Wrong taps just wobble, and a car bounces to help after two mistakes.</li>' +
+        '<li><b>Say.</b> She says the letters and the word. The voice check works only in some browsers. If it cannot hear her, you tap the gold button.</li>' +
+        '<li><b>Watch.</b> The monkey runs round a circle, then writes each letter in the right stroke order.</li>' +
+        '<li><b>Copy.</b> The monkey writes a letter, then she follows the dots. Covering most of the dots counts.</li>' +
+        '<li><b>Write.</b> The monkey shows it once, then she writes the letter alone. If the page does not notice, you tap the gold button.</li></ol>' +
+        '<p class="hint">Turn the volume up. The sirens and the spoken letters are most of the fun. Do one case a day and stop at five minutes.</p></div>' +
+        '<div class="card"><h3>A two-minute check</h3><p class="hint">Sit on the floor and keep it light. Tick what she already does.</p>' +
+        '<div class="checks">' + checks.map(function (k) { return '<label><input type="checkbox" data-act="check" data-k="' + k[0] + '"' + (state.checks[k[0]] ? ' checked' : '') + '><span>' + k[1] + '</span></label>'; }).join('') + '</div>' +
+        '<div class="plan"><strong>' + p[0] + '</strong><p>' + p[1] + '</p></div></div>' +
+        '<div class="card"><h3>If she says no</h3><ul class="tips">' +
+        '<li>Never say study, spelling or test. Say case, siren or patrol.</li>' +
+        '<li>Start with the siren step only. Cars and sirens are the hook, so let that be the whole session if you need to.</li>' +
+        '<li>Offer two choices: the cat case or the fox case.</li>' +
+        '<li>Let Officer Monkey make mistakes. Tap a wrong car on purpose and ask her to fix it.</li>' +
+        '<li>Every step has its own button at the top, so you can jump to any step and skip any letter that feels hard.</li></ul></div>' +
+        '<div class="card"><h3>Her spelling words</h3><div class="field"><label for="wordsInput">Type the real list, separated by commas (up to 6 letters each)</label>' +
+        '<textarea id="wordsInput" rows="3" spellcheck="false">' + esc(state.words.join(', ')) + '</textarea></div>' +
+        '<div class="btnrow" style="justify-content:flex-start"><button class="btn small" type="button" data-act="saveWords">Save words</button><button class="btn ghost small" type="button" data-act="defaultWords">Use the starter words</button></div>' +
+        '<p class="msg" id="wordsMsg" role="status"></p><p class="hint">Words the page knows get a picture. Other words show a monkey face.</p></div>' +
+        '<div class="card"><h3>Her name</h3><div class="field"><label for="nameInput">Officer’s name</label>' +
+        '<input id="nameInput" type="text" maxlength="24" autocomplete="off" value="' + esc(state.name) + '" placeholder="Type her name"></div>' +
+        '<div class="btnrow" style="justify-content:flex-start"><button class="btn ghost small" type="button" id="resetBtn" data-act="reset">Reset all badges</button></div>' +
+        '<p class="hint">Progress is saved on this phone or computer only.</p></div></div>';
+      var ni = byId('nameInput');
+      ni.addEventListener('change', function () { state.name = ni.value.trim().slice(0, 24); save(); });
+    }
+    var resetArmed = false;
+    actions = {
+      check: function (t) { state.checks[t.dataset.k] = t.checked; save(); render(); },
+      saveWords: function () {
+        var raw = byId('wordsInput').value.toLowerCase().split(/[^a-z]+/).filter(Boolean), seen = {}, out = [], bad = 0;
+        raw.forEach(function (w) { if (w.length > 6) { bad++; return; } if (!seen[w]) { seen[w] = 1; out.push(w); } });
+        if (!out.length) { byId('wordsMsg').textContent = 'Type at least one word, using letters only.'; return; }
+        state.words = out.slice(0, 24); save();
+        byId('wordsMsg').textContent = 'Saved ' + state.words.length + ' words.' + (bad ? ' Skipped ' + bad + ' word(s) longer than 6 letters.' : '');
+      },
+      defaultWords: function () { state.words = DEFAULT_WORDS.slice(); save(); render(); byId('wordsMsg').textContent = 'Starter words restored.'; },
+      reset: function (t) {
+        if (!resetArmed) { resetArmed = true; t.textContent = 'Tap again to erase all badges'; return; }
+        state.done = {}; save(); resetArmed = false; render(); updateHeader();
+      }
+    };
+    render();
+  };
+
+  /* ---------- router ---------- */
+  function route() {
+    if (cleanup) { cleanup(); cleanup = null; }
+    seq++;
+    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) {}
+    actions = {};
+    var h = (location.hash || '#home').slice(1), name = 'home', arg = null, m = /^case-([a-z]+)$/.exec(h);
+    if (m && state.words.indexOf(m[1]) >= 0) { name = 'case'; arg = m[1]; }
+    else if (h === 'mom') name = 'mom';
+    view.innerHTML = '';
+    updateHeader();
+    cleanup = VIEWS[name](arg) || null;
+    window.scrollTo(0, 0);
+  }
+  view.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-act]');
+    if (!t || t.tagName === 'INPUT') return;
+    if (actions[t.dataset.act]) actions[t.dataset.act](t);
+  });
+  view.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.tagName === 'INPUT' && t.dataset.act === 'check' && actions.check) actions.check(t);
+  });
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+
+</body></html>
